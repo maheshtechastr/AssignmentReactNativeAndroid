@@ -70,8 +70,7 @@ class Login extends React.Component {
 		
 		{this.state.isLoading && (
 			<ActivityIndicator
-				style={{ height: 100}}
-				color="#C00"
+				style={styles.loader}
 				size="large"
 			/>
 		)}
@@ -99,8 +98,8 @@ class Login extends React.Component {
 				
 				this.setState({errorMessage: ''})
 				this.setState({isLoggedIn:true})
-				this.setState({username:'',password:''})
-				this.props.navigation.navigate('Welcome')	
+				//this.setState({username:'',password:''})
+				this.props.navigation.navigate('TodoList', {username: username})	
 			}
 			this.setState({isLoading:false})
 		}, 1000);
@@ -151,7 +150,13 @@ const styles = StyleSheet.create({
 	},
 	blankView20:{
 		height:30
-	}
+	},
+	loader:{
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#fff"
+   },
 });
 
 

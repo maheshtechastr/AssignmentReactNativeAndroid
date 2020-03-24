@@ -1,6 +1,7 @@
 
 import 	LoginScreen from './Screens/Login';
 import 	WelcomeScreen from './Screens/Welcome';
+import 	TodoList from './Components/SourceListing';
 
 import {name as appName} from '../app.json';
 
@@ -21,6 +22,7 @@ function AppNavigator() {
 			options={{ title: 'Login Page' }}
 			/>
 		<Stack.Screen name="Welcome" component={WelcomeScreen} />
+		<Stack.Screen name="TodoList" component={TodoList} />
       </Stack.Navigator>
     </NavigationContainer>
   );
