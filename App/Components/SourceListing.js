@@ -12,15 +12,18 @@ Alert
 
 //import * as constants from 'Components/AppConstants';
 import * as constants from './AppConstants';
-import AsyncImage from './AsyncImage'
+import AsyncImage from './AsyncImage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class TodosList extends React.Component {
 	
 	constructor(props) {
 	 super(props);
 	 this.state = {
+		 
 	   loading: true,
-	   dataSource:[]
+	   dataSource:[],
+	   username:'',
 	  };
 	}
 	
@@ -31,20 +34,31 @@ export default class TodosList extends React.Component {
 		  headerTitleStyle: {textAlign: "center",flex: 1}
 		};
 	};
-
-	
 	 
 	componentDidMount(){
-		const { userName } = this.props.route.params;
-		fetch("http://jsonplaceholder.typicode.com/todos?userid="+userName)
-		.then(response => response.json())
-		.then((responseJson)=> {
-		  this.setState({
-		   loading: false,
-		   dataSource: responseJson
-		  })
-		})
-		.catch(error=>console.log(error)) //to catch the errors if any
+		//Below line can be use to get value from state route
+		//const { username } = this.props.route.params;
+		
+		//function to get the value from AsyncStorage
+		AsyncStorage.getItem('username').then(value => {
+			this.setState({ username: value })
+			console.log(value)
+		  
+			fetch("http://jsonplaceholder.typicode.com/todos?userid="+value)
+			.then(response => response.json())
+			.then((responseJson)=> {
+			  this.setState({
+			   loading: false,
+			   dataSource: responseJson
+			  })
+			})
+			.catch(error=>{
+				console.log(error)
+				this.setState({loading: false,
+				dataSource: null})
+				
+				}) //to catch the errors if any
+		});
 	}
 
 	FlatListItemSeparator = () => {
@@ -84,6 +98,12 @@ export default class TodosList extends React.Component {
 			<View style={styles.loader}> 
 			
 			<ActivityIndicator size="large" color="#0c9"/>
+			</View>
+		)} else	if(this.state.dataSource == null){
+			return( 
+			<View style={styles.loader}> 
+			
+			<Text> {constants.DataSourceNetWorkError}</Text>
 			</View>
 		)}
 		return(

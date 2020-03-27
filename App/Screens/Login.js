@@ -97,7 +97,9 @@ class Login extends React.Component {
 				this.setState({isLoggedIn:false})
 				this.setState({errorMessage: "Please enter a valid password 'test123' "})
 			} else {
-				 
+				//Setting a data to a AsyncStorage with respect to a key 
+				AsyncStorage.setItem('username', username);
+      
 				this.setState({errorMessage: ''})
 				this.setState({isLoggedIn:true})
 				//this.setState({username:'',password:''})
