@@ -1,3 +1,4 @@
+'use strict';
 import React, { Component } from 'react';
 import {
     ScrollView,
@@ -10,12 +11,13 @@ import {
 	Alert,
 	ActivityIndicator,
 	StyleSheet,
+	
 } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Login extends React.Component {
 	constructor(props){
@@ -95,7 +97,7 @@ class Login extends React.Component {
 				this.setState({isLoggedIn:false})
 				this.setState({errorMessage: "Please enter a valid password 'test123' "})
 			} else {
-				
+				 
 				this.setState({errorMessage: ''})
 				this.setState({isLoggedIn:true})
 				//this.setState({username:'',password:''})
@@ -108,6 +110,7 @@ class Login extends React.Component {
 	}
   };
 }
+
 
 //----
 const styles = StyleSheet.create({

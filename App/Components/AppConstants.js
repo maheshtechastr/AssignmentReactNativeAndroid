@@ -1,3 +1,4 @@
+'use strict';
 //AppConstants
 
 export const NeverForget = 'Never forget to stay in touch with the people that matter to you.';

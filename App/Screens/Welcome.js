@@ -19,7 +19,7 @@ export default class HelloWorldApp extends Component {
 		</View>
 		
 		<View style={styles.sectionBody}> 
-			<Text style={styles.bodyText}>Hello, world! {appName}</Text>
+			<Text style={styles.bodyText}>Hello, world! </Text>
 		</View>
 		
       </View>

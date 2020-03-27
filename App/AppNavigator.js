@@ -1,4 +1,4 @@
-
+'use strict';
 import 	LoginScreen from './Screens/Login';
 import 	WelcomeScreen from './Screens/Welcome';
 import 	TodoList from './Components/SourceListing';

@@ -1,3 +1,4 @@
+'use strict';
 /* @flow */
 
 import React, { // eslint-disable-line no-unused-vars
