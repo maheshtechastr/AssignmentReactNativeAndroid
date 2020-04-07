@@ -5,60 +5,37 @@ StyleSheet,
 View,
 ActivityIndicator,
 FlatList,
+Image,
 Text,
 TouchableOpacity,
 Alert
 } from "react-native";
 
-//import * as constants from 'Components/AppConstants';
 import * as constants from './AppConstants';
 import AsyncImage from './AsyncImage';
-import AsyncStorage from '@react-native-community/async-storage';
+
 
 export default class TodosList extends React.Component {
 	
 	constructor(props) {
-	 super(props);
-	 this.state = {
-		 
-	   loading: true,
-	   dataSource:[],
-	   username:'',
-	  };
+		super(props);
+		this.state = {		 
+			loading: true,
+			dataSource:[],
+		};
 	}
 	
 	static navigationOptions = ({ navigation }) => {
 		return {
-		  title: "Todos Listing",
+		  title: "Todo List",
 		  headerStyle: {backgroundColor: "#fff"},
-		  headerTitleStyle: {textAlign: "center",flex: 1}
+		  headerTitleAlign: 'center'
 		};
 	};
 	 
 	componentDidMount(){
-		//Below line can be use to get value from state route
-		//const { username } = this.props.route.params;
-		
-		//function to get the value from AsyncStorage
-		AsyncStorage.getItem('username').then(value => {
-			this.setState({ username: value })
-			console.log(value)
-		  
-			fetch("http://jsonplaceholder.typicode.com/todos?userid="+value)
-			.then(response => response.json())
-			.then((responseJson)=> {
-			  this.setState({
-			   loading: false,
-			   dataSource: responseJson
-			  })
-			})
-			.catch(error=>{
-				console.log(error)
-				this.setState({loading: false,
-				dataSource: null})
-				
-				}) //to catch the errors if any
-		});
+		//console.log(constants.BASE_URL+"/todos")
+		this.getData();
 	}
 
 	FlatListItemSeparator = () => {
@@ -76,21 +53,20 @@ export default class TodosList extends React.Component {
 		this.props.navigation.navigate("Welcome", {name: item})
 	}  
 		
-	renderItem=(data)=>
-
-	<TouchableOpacity style={styles.list} 
-	 onPress={this.getListViewItem.bind(this, data.item)}
-	>
-	<Text style={styles.lightText}>Id: {data.item.id}</Text>
-	<Text style={styles.lightText}
-	>
-	Title: {data.item.title}</Text>
-	<Text style={styles.lightText}>Status: {data.item.completed?"completed":"Not completed"}</Text>
-	
-
-	  
-	</TouchableOpacity>
-
+	renderItem=(data)=>		
+		<TouchableOpacity style={styles.list} 
+		 onPress={this.getListViewItem.bind(this, data.item)}>
+			<View style={{flexDirection:'row'}}>
+				<Image style={{width:50,height:50, marginRight:10, borderRadius:50,
+					backgroundColor:'#ccc'}}>
+				</Image>		
+				<View style={{justifyContent:'center'}}>			
+					<Text style={styles.lightText}>Title: {data.item.title}</Text>
+					<Text style={styles.lightText}>Status: {data.item.completed?"completed":"Not completed"}</Text>	  
+				</View>
+			</View>
+		</TouchableOpacity>
+		
 
 	render(){
 		if(this.state.loading){
@@ -103,7 +79,14 @@ export default class TodosList extends React.Component {
 			return( 
 			<View style={styles.loader}> 
 			
-			<Text> {constants.DataSourceNetWorkError}</Text>
+			<Text style={{paddingVertical: 4, fontSize:20,fontWeight: "bold"}}>
+			Something went wrong</Text>
+			<Text style={{paddingVertical: 4, fontSize:15, color:'#999'}}>Give it another try </Text>
+			<TouchableOpacity style={styles.list} 
+			 onPress={this.getData}>
+			<Text style={{fontSize:16, color:'#00ccff', fontWeight: "bold"}}>RELOAD</Text>
+			
+			</TouchableOpacity >
 			</View>
 		)}
 		return(
@@ -116,7 +99,26 @@ export default class TodosList extends React.Component {
 			keyExtractor= {item=>item.id.toString()}
 			/>
 			</View>
-	)}
+		)
+	}
+	
+	getData = () => {
+		this.setState({loading: true});
+		console.log('GetData Called');
+		fetch(constants.BASE_URL+"/todos")
+			.then(response => response.json())
+			.then((responseJson)=> {
+			  this.setState({
+			   loading: false,
+			   dataSource: responseJson
+			  })
+			})
+			.catch(error=>{
+				console.log(error)
+				this.setState({loading: false,
+				dataSource: null})			
+			}); //to catch the errors if any
+	}
 }
 
 //**********Stylesheet*******
